@@ -22,7 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import com.example.ktorkoin.data.models.News
 import com.example.ktorkoin.ui.theme.KtorKoinTheme
-import org.koin.androidx.viewmodel.ext.android.getViewModel
+import org.koin.androidx.compose.koinViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 class MainActivity : ComponentActivity() {
@@ -32,7 +32,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             val context = LocalContext.current
-            val viewModel = getViewModel<NewsViewModel>()
+            val viewModel = koinViewModel<NewsViewModel>()
             val result = viewModel.news.collectAsState()
             KtorKoinTheme {
                 result.value?.let {
