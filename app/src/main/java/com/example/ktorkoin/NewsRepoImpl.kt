@@ -12,8 +12,9 @@ import io.ktor.client.request.parameter
 
 class NewsRepoImpl(
     private val client: HttpClient
-) : NewsRepo {
-    override suspend fun getNews(): Result<List<News>> {
+) : NewsRepo{
+
+    override suspend fun getNews(page: Int): Result<List<News>> {
         return try {
             val response: NewsResponse = client.get(Base_Url){
                 parameter("apikey", Api_Key)

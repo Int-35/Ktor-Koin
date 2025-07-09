@@ -11,5 +11,7 @@ data class NewsResponse(
     @SerialName("totalResults")
     val totalResults: Int,
     @SerialName("results")
-    val results: List<News>
+    val results: List<News>,
+    @SerialName("nextPage")
+    val nextPage: String?
 )

@@ -4,5 +4,5 @@ import com.example.ktorkoin.data.models.News
 
 
 interface NewsRepo {
-    suspend fun getNews(): Result<List<News>>
+    suspend fun getNews(page: Int): Result<List<News>>
 }

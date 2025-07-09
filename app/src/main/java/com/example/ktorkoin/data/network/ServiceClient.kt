@@ -32,8 +32,6 @@ class ServiceClient {
                 isLenient = true
                 ignoreUnknownKeys = true
             })
-
-
         }
 
         install(Logging){

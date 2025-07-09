@@ -1,7 +1,6 @@
 package com.example.ktorkoin.data.models
 
 
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
