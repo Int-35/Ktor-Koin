@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     id ("kotlinx-serialization")
+    id("com.google.devtools.ksp") version "2.0.21-1.0.26"
 }
 
 android {
@@ -38,6 +39,10 @@ android {
     buildFeatures {
         compose = true
     }
+
+    ksp {
+        arg("room.schemaLocation", "$projectDir/schemas")
+    }
 }
 
 dependencies {
@@ -62,7 +67,7 @@ dependencies {
     implementation (libs.ktor.client.android)
     implementation(libs.ktor.client.content.negotiation)
     implementation(libs.ktor.serialization.kotlinx.json)
-//    implementation (libs.kotlinx.serialization.json)
+    implementation (libs.kotlinx.serialization.json)
     implementation (libs.ktor.client.logging.jvm)
 
     implementation(libs.koin.core)
@@ -71,5 +76,12 @@ dependencies {
 
     //Pagination
     implementation ("androidx.paging:paging-compose:3.3.6")
+
+    //room
+    val room_version = "2.6.1"
+
+    implementation("androidx.room:room-runtime:$room_version")
+    implementation("androidx.room:room-ktx:$room_version")
+    ksp("androidx.room:room-compiler:$room_version")
 
 }
