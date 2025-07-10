@@ -1,14 +1,19 @@
 package com.example.ktorkoin.presentation.views
 
-import android.annotation.SuppressLint
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -21,21 +26,17 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavHostController
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.example.ktorkoin.data.dataSouce.network.models.News
-import com.example.ktorkoin.data.mapper.toEntity
+import coil.compose.AsyncImage
+import com.example.ktorkoin.data.model.Article
+import com.example.ktorkoin.navigation.Routes
 import com.example.ktorkoin.presentation.viewModels.NewsViewModel
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
-
-@SuppressLint("CoroutineCreationDuringComposition")
 @Composable
-fun MainUi(viewModel: NewsViewModel) {
+fun MainUi(viewModel: NewsViewModel, navHostController: NavHostController) {
     val newsList = viewModel.newsPager.collectAsLazyPagingItems()
     val show = remember { mutableStateOf(false) }
 
@@ -43,63 +44,41 @@ fun MainUi(viewModel: NewsViewModel) {
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
-            LazyColumn(
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(2),
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(it),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Top
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                contentPadding = PaddingValues(8.dp)
             ) {
                 items(newsList.itemCount) { index ->
                     val item = newsList[index]
                     item?.let { newsItem ->
-                        NewsCard(newsItem)
-                        Spacer(modifier = Modifier.height(4.dp))
+                        NewsCard(newsItem) {
+                            navHostController.navigate(Routes.DetailScreenRoute(newsItem.articleId))
+                        }
+                    }
+                }
 
-                        // Save button below each article
-                        OutlinedButton(
-                            onClick = { viewModel.saveArticle(newsItem.toEntity()) },
+                if (newsList.loadState.append is LoadState.Loading) {
+                    item(span = { GridItemSpan(2) }) {
+                        Box(
                             modifier = Modifier
-                                .padding(horizontal = 16.dp)
-                                .align(Alignment.CenterHorizontally)
+                                .fillMaxWidth()
+                                .padding(16.dp),
+                            contentAlignment = Alignment.Center
                         ) {
-                            Text("Save Article")
+                            CircularProgressIndicator()
                         }
-
-                        Spacer(modifier = Modifier.height(12.dp))
                     }
                 }
 
-                // Loader when loading new pages
-                when (newsList.loadState.append) {
-                    is LoadState.Loading -> {
-                        item {
-                            viewModel.viewModelScope.launch {
-                                delay(3000)
-                            }
-                            CircularProgressIndicator(
-                                modifier = Modifier
-                                    .padding(16.dp)
-                                    .align(Alignment.CenterHorizontally)
-                            )
-                        }
-                    }
-                    is LoadState.Error -> {
-                        val e = newsList.loadState.append as LoadState.Error
-                        item {
-                            Text(
-                                text = "Error loading more: ${e.error.localizedMessage}",
-                                color = Color.Red,
-                                modifier = Modifier.padding(16.dp)
-                            )
-                        }
-                    }
-                    else -> {}
-                }
             }
 
             if (show.value) {
-                LocalSaveUi(viewModel)
+//                LocalSaveUi(viewModel)
             }
 
             OutlinedButton(
@@ -115,21 +94,42 @@ fun MainUi(viewModel: NewsViewModel) {
 }
 
 
+
 @Composable
 fun NewsCard(
-    news: News
+    article: Article,
+    onClick: @Composable () -> Unit
 ) {
+
+    val clicked = remember { mutableStateOf(false) }
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp),
-        elevation = CardDefaults.cardElevation(4.dp)
+            .height(220.dp)
+            .clickable { clicked.value = true },
+        elevation = CardDefaults.cardElevation(2.dp),
+        shape = RoundedCornerShape(6.dp)
     ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Text(news.title, style = MaterialTheme.typography.titleMedium)
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(news.description ?: "No description available", style = MaterialTheme.typography.bodyMedium)
-
+        if (clicked.value){
+            onClick()
+        }
+        Column {
+            AsyncImage(
+                model = article.image_url ?: "",
+                contentDescription = article.title,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(140.dp)
+            )
+            Spacer(modifier = Modifier.height(6.dp))
+            Text(
+                text = article.title,
+                style = MaterialTheme.typography.titleSmall,
+                modifier = Modifier
+                    .padding(horizontal = 8.dp)
+                    .fillMaxWidth(),
+                maxLines = 2
+            )
         }
     }
 }

@@ -84,4 +84,13 @@ dependencies {
     implementation("androidx.room:room-ktx:$room_version")
     ksp("androidx.room:room-compiler:$room_version")
 
+    implementation("io.coil-kt:coil-compose:2.4.0")
+
+
+    val nav_version = "2.9.1"
+
+    // Jetpack Compose integration
+    implementation("androidx.navigation:navigation-compose:$nav_version")
+
+
 }

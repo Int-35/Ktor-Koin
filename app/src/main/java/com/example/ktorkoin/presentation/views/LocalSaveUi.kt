@@ -12,22 +12,21 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.example.ktorkoin.data.dataSouce.local.models.NewsEntity
-import com.example.ktorkoin.data.mapper.toDomain
+import com.example.ktorkoin.data.model.Article
 import com.example.ktorkoin.presentation.viewModels.NewsViewModel
 
 
 @Composable
 fun LocalSaveUi(viewModel: NewsViewModel) {
-    val newsList: State<List<NewsEntity>> = viewModel.newsList.collectAsState(listOf())
+    val articleList: State<List<Article>> = viewModel.articleList.collectAsState(listOf())
     Scaffold {
         LazyColumn(
             modifier = Modifier.fillMaxSize().padding(it),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceBetween
         ) {
-           items(newsList.value) {
-               NewsCard(it.toDomain())
+           items(articleList.value) {
+               NewsCard(it,{})
            }
         }
     }

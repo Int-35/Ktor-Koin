@@ -4,7 +4,7 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Query
 import androidx.room.Upsert
-import com.example.ktorkoin.data.dataSouce.local.models.NewsEntity
+import com.example.ktorkoin.data.model.Article
 import kotlinx.coroutines.flow.Flow
 
 
@@ -12,12 +12,15 @@ import kotlinx.coroutines.flow.Flow
 interface NewsDao {
 
     @Upsert
-    suspend fun upsert(newsEntity: NewsEntity)
+    suspend fun upsert(articleEntity: Article)
 
     @Delete
-    suspend fun delete(newsEntity: NewsEntity)
+    suspend fun delete(articleEntity:Article )
 
     @Query("SELECT * FROM Article")
-    fun getAllNews() : Flow<List<NewsEntity>>
+    fun getAllNews() : Flow<List<Article>>
+
+    @Query("SELECT * FROM ARTICLE WHERE article_id = :articleId")
+    suspend fun getArticleById(articleId: String): Article?
 
 }
