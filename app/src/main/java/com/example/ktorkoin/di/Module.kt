@@ -14,7 +14,7 @@ import org.koin.dsl.module
 
 val appModule = module {
     single { ServiceClient().getHttpClient() }
-    single<NewsRepo> { NewsRepoImpl( get(), get() ) }
+    single<NewsRepo> { NewsRepoImpl( get() ) }
     viewModel <NewsViewModel>{ NewsViewModel(get(), get()) }
 
     single<NewsDb> {
