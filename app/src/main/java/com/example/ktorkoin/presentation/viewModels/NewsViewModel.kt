@@ -37,11 +37,11 @@ class NewsViewModel(
         }
     }
 
-     fun saveArticle(articleEntity: Article){
-         viewModelScope.launch {
-             localNewsRepo.insertNews(articleEntity)
-         }
-    }
+//     fun saveArticle(articleEntity: Article){
+//         viewModelScope.launch {
+//             localNewsRepo.insertNews(articleEntity)
+//         }
+//    }
 
     val newsPager = Pager(
         config = PagingConfig(10)

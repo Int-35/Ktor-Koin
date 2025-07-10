@@ -31,12 +31,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.example.ktorkoin.data.model.Article
 import com.example.ktorkoin.presentation.viewModels.NewsViewModel
-import android.net.Uri
-import androidx.core.net.toUri
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -90,7 +89,6 @@ fun DetailScreen(
 
 @Composable
 fun NewsDetailContent(article: Article) {
-    val context = LocalContext.current
 
     Column(
         modifier = Modifier

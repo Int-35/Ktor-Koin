@@ -12,9 +12,9 @@ open class LocalNewsRepo(
         dao.upsert(article)
     }
 
-    suspend fun getArticleById( article_id : String ): Article?{
-             return dao.getArticleById(article_id)
-    }
+//    suspend fun getArticleById( article_id : String ): Article?{
+//             return dao.getArticleById(article_id)
+//    }
 
    fun getNews(): Flow<List<Article>> {
         return dao.getAllNews()
