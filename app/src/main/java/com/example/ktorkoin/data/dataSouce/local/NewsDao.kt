@@ -1,5 +1,6 @@
 package com.example.ktorkoin.data.dataSouce.local
 
+import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Query
@@ -14,13 +15,16 @@ interface NewsDao {
     @Upsert
     suspend fun upsert(articleEntity: Article)
 
-    @Delete
-    suspend fun delete(articleEntity:Article )
+//    @Delete
+//    suspend fun delete(articleEntity:Article )
 
-    @Query("SELECT * FROM Article")
-    fun getAllNews() : Flow<List<Article>>
+//    @Query("SELECT * FROM Article")
+//    fun getAllNews() : Flow<List<Article>>
 
     @Query("SELECT * FROM ARTICLE WHERE article_id = :articleId")
     suspend fun getArticleById(articleId: String): Article?
+
+    @Query("SELECT * FROM Article ORDER BY title ASC")
+    fun getPagedNews(): PagingSource<Int, Article>
 
 }

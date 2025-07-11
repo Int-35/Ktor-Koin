@@ -8,6 +8,7 @@ import androidx.navigation.toRoute
 import com.example.ktorkoin.presentation.viewModels.NewsViewModel
 import com.example.ktorkoin.presentation.views.MainUi
 import com.example.ktorkoin.presentation.views.DetailScreen
+import com.example.ktorkoin.presentation.views.LocalSaveUi
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -31,7 +32,12 @@ fun NavHost(){
             )
         }
 
-
+        composable<Routes.LocalSaveUiRoute> {
+            LocalSaveUi(
+                viewModel = viewModel,
+                navHostController = navHostController
+            )
+        }
 
 
 

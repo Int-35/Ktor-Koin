@@ -9,4 +9,7 @@ sealed class Routes{
 
     @Serializable
     data class DetailScreenRoute( val article_id: String)
+
+    @Serializable
+    object LocalSaveUiRoute
 }

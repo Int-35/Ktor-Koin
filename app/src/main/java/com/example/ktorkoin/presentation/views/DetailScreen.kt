@@ -46,7 +46,7 @@ fun DetailScreen(
 
     ) {
     LaunchedEffect(articleId) {
-        viewModel.getArticle(articleId)
+        viewModel.getNetworkArticle(articleId)
     }
       val articleState = viewModel.article.collectAsState()
       val article = articleState.value

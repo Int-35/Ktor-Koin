@@ -4,10 +4,12 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.example.ktorkoin.Result
 import com.example.ktorkoin.data.model.Article
+import com.example.ktorkoin.domain.Repo.LocalNewsRepo
 import com.example.ktorkoin.domain.Repo.NetworkNewsRepo
 
 class NewsPagingSource(
-    private val repo: NetworkNewsRepo
+    private val repo: NetworkNewsRepo,
+    private val localNewsRepo: LocalNewsRepo
 ): PagingSource<Int, Article>() {
     override fun getRefreshKey(state: PagingState<Int, Article>): Int? {
         return state.anchorPosition?.let { anchor ->
@@ -24,6 +26,8 @@ class NewsPagingSource(
             when (response) {
                 is Result.Success -> {
                      val articleList: List<Article> = response.articles
+                     localNewsRepo.upsertArticles(articleList)
+
                     LoadResult.Page(
                         data = articleList,
                         prevKey = if (currentPage == 1) null else currentPage - 1,
